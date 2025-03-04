@@ -1,5 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ApiResponse, AnswerRequest } from "../schemas/treeMatch";
+import {
+  ApiResponse,
+  AnswerRequest,
+  isQuestion,
+  isMatch,
+} from "../schemas/treeMatch";
 import {
   getFirstQuestion,
   submitAnswer,
@@ -10,9 +15,6 @@ const TREE_MATCH_QUERY_KEYS = {
   currentState: ["treeMatch", "currentState"],
 };
 
-/**
- * Hook for fetching the first question
- */
 export function useFirstQuestion() {
   return useQuery({
     queryKey: TREE_MATCH_QUERY_KEYS.firstQuestion,
@@ -29,7 +31,14 @@ export function useTreeMatchFlow() {
   const queryClient = useQueryClient();
   const firstQuestionQuery = useFirstQuestion();
 
-  // Mutation for submitting answers
+  const currentState =
+    queryClient.getQueryData<ApiResponse>(TREE_MATCH_QUERY_KEYS.currentState) ||
+    (firstQuestionQuery.data &&
+      queryClient.setQueryData(
+        TREE_MATCH_QUERY_KEYS.currentState,
+        firstQuestionQuery.data
+      ));
+
   const submitAnswerMutation = useMutation({
     mutationFn: (answerData: AnswerRequest) => submitAnswer(answerData),
     onSuccess: (data) => {
@@ -37,7 +46,6 @@ export function useTreeMatchFlow() {
     },
   });
 
-  // Function to reset the flow
   const resetFlow = () => {
     queryClient.removeQueries({ queryKey: TREE_MATCH_QUERY_KEYS.currentState });
     queryClient.invalidateQueries({
@@ -46,16 +54,16 @@ export function useTreeMatchFlow() {
   };
 
   return {
-    currentState: queryClient.getQueryData<ApiResponse>(
-      TREE_MATCH_QUERY_KEYS.currentState
-    ),
+    currentState,
 
-    // states
     isLoading: firstQuestionQuery.isLoading || submitAnswerMutation.isPending,
     isError: firstQuestionQuery.isError || submitAnswerMutation.isError,
     error: firstQuestionQuery.error || submitAnswerMutation.error,
 
     submitAnswer: submitAnswerMutation.mutate,
     resetFlow,
+
+    isQuestion: (currentState && isQuestion(currentState)) || false,
+    isMatch: (currentState && isMatch(currentState)) || false,
   };
 }
