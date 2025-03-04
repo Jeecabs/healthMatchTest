@@ -15,21 +15,21 @@ export default function TreeMatcher() {
     "entering" | "exiting" | "stable"
   >("stable");
 
-  const { currentState, isLoading, isError, error, submitAnswer, resetFlow, } =
+  const { currentState, isLoading, isError, error, submitAnswer, resetFlow } =
     useTreeMatchFlow();
 
-  const handleAnswer = (stepId: number, answer: string) => {
+  const handleAnswer = async (stepId: number, answer: string) => {
     setAnimationState("exiting");
 
-    setTimeout(() => {
-      submitAnswer({ step_id: stepId, answer });
+    setTimeout(async () => {
+      await submitAnswer({ step_id: stepId, answer });
       setAnimationState("entering");
 
       // Reset animation state after entry animation completes
       setTimeout(() => {
         setAnimationState("stable");
-      }, 500);
-    }, 500);
+      }, 300);
+    }, 300);
   };
 
   const handleReset = () => {

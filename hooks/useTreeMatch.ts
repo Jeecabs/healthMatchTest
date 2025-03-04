@@ -60,7 +60,7 @@ export function useTreeMatchFlow() {
     isError: firstQuestionQuery.isError || submitAnswerMutation.isError,
     error: firstQuestionQuery.error || submitAnswerMutation.error,
 
-    submitAnswer: submitAnswerMutation.mutate,
+    submitAnswer: submitAnswerMutation.mutateAsync,
     resetFlow,
 
     isQuestion: (currentState && isQuestion(currentState)) || false,
