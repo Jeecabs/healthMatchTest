@@ -15,7 +15,7 @@ export default function TreeMatcher() {
     "entering" | "exiting" | "stable"
   >("stable");
 
-  const { currentState, isLoading, isError, error, submitAnswer, resetFlow } =
+  const { currentState, isLoading, isError, error, submitAnswer, resetFlow, } =
     useTreeMatchFlow();
 
   const handleAnswer = (stepId: number, answer: string) => {
@@ -29,7 +29,7 @@ export default function TreeMatcher() {
       setTimeout(() => {
         setAnimationState("stable");
       }, 500);
-    }, 300);
+    }, 500);
   };
 
   const handleReset = () => {

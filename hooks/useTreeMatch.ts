@@ -1,11 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ApiResponse, AnswerRequest } from "../schemas/treeMatch";
 import {
-  ApiResponse,
-  AnswerRequest,
-  isQuestion,
-  isMatch,
-} from "../schemas/treeMatch";
-import { getFirstQuestion, submitAnswer } from "../app/actions/treeMatchActions";
+  getFirstQuestion,
+  submitAnswer,
+} from "../app/actions/treeMatchActions";
 
 const TREE_MATCH_QUERY_KEYS = {
   firstQuestion: ["treeMatch", "firstQuestion"],
@@ -31,15 +29,6 @@ export function useTreeMatchFlow() {
   const queryClient = useQueryClient();
   const firstQuestionQuery = useFirstQuestion();
 
-  // Get current state from cache or initial query
-  const currentState =
-    queryClient.getQueryData<ApiResponse>(TREE_MATCH_QUERY_KEYS.currentState) ||
-    (firstQuestionQuery.data &&
-      queryClient.setQueryData(
-        TREE_MATCH_QUERY_KEYS.currentState,
-        firstQuestionQuery.data
-      ));
-
   // Mutation for submitting answers
   const submitAnswerMutation = useMutation({
     mutationFn: (answerData: AnswerRequest) => submitAnswer(answerData),
@@ -57,22 +46,16 @@ export function useTreeMatchFlow() {
   };
 
   return {
-    // Data
     currentState: queryClient.getQueryData<ApiResponse>(
       TREE_MATCH_QUERY_KEYS.currentState
     ),
 
-    // Loading/error states
+    // states
     isLoading: firstQuestionQuery.isLoading || submitAnswerMutation.isPending,
     isError: firstQuestionQuery.isError || submitAnswerMutation.isError,
     error: firstQuestionQuery.error || submitAnswerMutation.error,
 
-    // Actions
     submitAnswer: submitAnswerMutation.mutate,
     resetFlow,
-
-    // Helper state flags
-    isQuestion: (currentState && isQuestion(currentState)) || false,
-    isMatch: (currentState && isMatch(currentState)) || false,
   };
 }
