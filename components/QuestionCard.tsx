@@ -34,7 +34,6 @@ export default function QuestionCard({
     exiting: { opacity: 0, y: -20 },
   };
 
-  
   const handleAnswerSelect = (answer: string) => {
     setSelectedAnswer(answer);
 

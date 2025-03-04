@@ -35,4 +35,4 @@ export const isQuestion = (response: ApiResponse): response is Question =>
   "question" in response;
 
 export const isMatch = (response: ApiResponse): response is Match =>
-  "match" in response;
+  "match" in response; 

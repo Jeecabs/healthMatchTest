@@ -1,11 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { treeMatchApi } from "../api/treeMatch";
 import {
   ApiResponse,
   AnswerRequest,
   isQuestion,
   isMatch,
 } from "../schemas/treeMatch";
+import { getFirstQuestion, submitAnswer } from "../app/actions/treeMatchActions";
 
 const TREE_MATCH_QUERY_KEYS = {
   firstQuestion: ["treeMatch", "firstQuestion"],
@@ -18,7 +18,7 @@ const TREE_MATCH_QUERY_KEYS = {
 export function useFirstQuestion() {
   return useQuery({
     queryKey: TREE_MATCH_QUERY_KEYS.firstQuestion,
-    queryFn: () => treeMatchApi.getFirstQuestion(),
+    queryFn: () => getFirstQuestion(),
   });
 }
 
@@ -42,8 +42,7 @@ export function useTreeMatchFlow() {
 
   // Mutation for submitting answers
   const submitAnswerMutation = useMutation({
-    mutationFn: (answerData: AnswerRequest) =>
-      treeMatchApi.submitAnswer(answerData),
+    mutationFn: (answerData: AnswerRequest) => submitAnswer(answerData),
     onSuccess: (data) => {
       queryClient.setQueryData(TREE_MATCH_QUERY_KEYS.currentState, data);
     },

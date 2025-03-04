@@ -1,4 +1,4 @@
-import TreeMatcher from "./components/TreeMatcher";
+import TreeMatcher from "../components/TreeMatcher";
 
 export default function Home() {
   return (

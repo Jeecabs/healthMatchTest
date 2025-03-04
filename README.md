@@ -21,7 +21,7 @@ TreeMatch is a web application that helps users find the perfect tree for their 
 1. Create a `.env.local` file in the root directory with the following content:
 
 ```
-NEXT_PUBLIC_API_BASE_URL=http://fe-interview-api-dev.ap-southeast-2.elasticbeanstalk.com
+API_BASE_URL=http://fe-interview-api-dev.ap-southeast-2.elasticbeanstalk.com
 ```
 
 ### Installation
@@ -53,12 +53,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Project Structure
 
 - `app/` - Next.js app directory
-  - `components/` - React components
-  - `api/` - API client for the TreeMatch service
-  - `hooks/` - Custom React hooks
-  - `schemas/` - Zod schemas for type validation
+  - `actions/` - Server actions for API communication
   - `page.tsx` - Main page component
   - `layout.tsx` - Root layout component
+- `components/` - React components
+- `hooks/` - Custom React hooks
+- `schemas/` - Zod schemas for type validation
 
 ## Technologies Used
 
